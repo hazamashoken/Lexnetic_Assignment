@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z^0$w-2&*)9dfw&=m+$nj+8og5o(-mjl^l2#q5(mp9f#m74r^@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lexnetic_school',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# NINJA_DOCS_VIEW = 'redoc'
+
+# CUSTOM SETTING FOR SECURITY
+DEFAULT_PASSWORD = "@42Bangkok"
