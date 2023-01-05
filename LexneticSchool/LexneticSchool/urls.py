@@ -25,4 +25,5 @@ api.add_router('v1', lexetic_school_router)
 urlpatterns = [
 	path('api/', api.urls),
 	path('admin/', admin.site.urls),
+	path('', include('lexnetic_school.urls')),
 ]

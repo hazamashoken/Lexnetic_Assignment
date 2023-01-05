@@ -1,4 +1,5 @@
 from ninja import Router, Schema, ModelSchema
+from ninja.pagination import paginate
 from ninja.security import django_auth, APIKeyHeader
 from django.http import Http404
 from django.contrib.auth.models import User, Group
@@ -77,6 +78,7 @@ class AuthHeader(APIKeyHeader):
 
 # GET alls Schools
 @router.get('schools', response=list[SchoolOut])
+@paginate
 def list_schools(request):
 	return [SchoolOut.from_orm(school) for school in School.objects.all()]
 
@@ -116,6 +118,7 @@ def delete_school(request, school_id: int):
 
 # GET alls Members
 @router.get('members', response=list[MemberOut])
+@paginate
 def list_members(request):
 	return [MemberOut.from_orm(member) for member in Member.objects.all()]
 
@@ -152,6 +155,7 @@ def get_member_by_username(request, username: str):
 
 # GET alls HeadsMasters
 @router.get('heads_masters', response=list[HeadMasterOut])
+@paginate
 def list_heads_masters(request):
 	return [HeadMasterOut.from_orm(head_master) for head_master in HeadMaster.objects.all()]
 
@@ -218,6 +222,7 @@ def delete_head_master(request, head_master_id: int):
 
 # GET alls Teachers
 @router.get('teachers', response=list[TeacherOut])
+@paginate
 def list_teachers(request):
 	return [TeacherOut.from_orm(teacher) for teacher in Teacher.objects.all()]
 
@@ -281,6 +286,7 @@ def delete_teacher(request, teacher_id: int):
 
 # GET alls Classes
 @router.get('classes', response=list[ClassOut])
+@paginate
 def list_classes(request):
 	return [ClassOut.from_orm(class_) for class_ in Class.objects.all()]
 
@@ -346,6 +352,7 @@ def delete_class(request, class_id: int):
 
 # GET alls Students
 @router.get('students', response=list[StudentOut])
+@paginate
 def list_students(request):
 	return [StudentOut.from_orm(student) for student in Student.objects.all()]
 
