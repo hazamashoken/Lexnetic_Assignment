@@ -1,6 +1,22 @@
 from ninja import Schema, ModelSchema
 from ninja.orm import create_schema
+from pydantic.fields import ModelField
+from typing import Generic, TypeVar
+
 from lexnetic_school.models import Class, Student, Teacher, School, HeadMaster, PersonalInfo, Member
+
+PydanticField = TypeVar('PydanticField')
+
+class EmptyStrToDefault(Generic[PydanticField]):
+	@classmethod
+	def __get_validators__(cls):
+		yield cls.validate
+
+	@classmethod
+	def validate(cls, v: PydanticField, field: ModelField) -> PydanticField:
+		if v == "":
+			return field.default
+		return v
 
 ######################
 #   Wrapper Schemas  #
@@ -15,7 +31,46 @@ class OkOut(Schema):
 	model: ModelSchema
 
 ######################
-# Schemas for input  #
+# Schemas for Patch  #
+######################
+
+class PersonalInfoPatch(Schema):
+	first_name: str = None
+	middle_name: str = None
+	last_name: str = None
+	email: str = None
+	phone: str = None
+	address: str = None
+
+class SchoolPatch(Schema):
+	name: str = None
+	address: str = None
+	phone: str = None
+	email: str = None
+	website: str = None
+
+class ClassPatch(Schema):
+	year: int = None
+
+class MemberPatch(Schema):
+	school_id: int = None
+	personal_info: PersonalInfoPatch
+
+class HeadMasterPatch(Schema):
+	school_id: int = None
+	personal_info: PersonalInfoPatch
+
+class TeacherPatch(Schema):
+	school_id: int = None
+	personal_info: PersonalInfoPatch
+
+class StudentPatch(Schema):
+	school_id: int = None
+	class_id: int = None
+	personal_info: PersonalInfoPatch
+
+######################
+#  Schemas for POST  #
 ######################
 
 class PersonalInfoIn(ModelSchema):
@@ -49,6 +104,17 @@ class StudentIn(Schema):
 	intake_year: int
 	personal_info: PersonalInfoIn
 
+class ClassIn(ModelSchema):
+	teacher_id: int
+	school_id: int
+	class Config:
+		model = Class
+		model_fields = ['year']
+
+######################
+#   Schemas for PUT  #
+######################
+
 class HeadMasterPut(Schema):
 	school_id: int
 	personal_info: PersonalInfoIn
@@ -61,16 +127,8 @@ class StudentPut(Schema):
 	school_id: int
 	personal_info: PersonalInfoIn
 
-class ClassIn(ModelSchema):
-	teacher_id: int
-	school_id: int
-	class Config:
-		model = Class
-		model_fields = ['year']
-
-
 ######################
-# Schemas for output #
+#   Schemas for GET  #
 ######################
 
 class PersonalInfoOut(ModelSchema):
@@ -128,6 +186,7 @@ class ClassOut(ModelSchema):
 		model = Class
 		model_fields = '__all__'
 	teachers: TeacherOut = None
+	student_count: int = None
 	students: list[StudentOut] = None
 
 	@staticmethod
@@ -138,6 +197,10 @@ class ClassOut(ModelSchema):
 	@staticmethod
 	def resolve_students(obj):
 		return [student for student in Student.objects.all() if student.f_class.id == obj.id]
+
+	@staticmethod
+	def resolve_student_count(obj):
+		return len(ClassOut.resolve_students(obj))
 
 class HeadMasterOut(ModelSchema):
 	school_id: int = None
@@ -161,6 +224,9 @@ class SchoolOut(ModelSchema):
 		model = School
 		model_fields = '__all__'
 	head_master: HeadMasterOut = None
+	teacher_count: int = None
+	student_count: int = None
+	class_count: int = None
 	classes: list[ClassOut] = None
 
 	@staticmethod
@@ -173,3 +239,15 @@ class SchoolOut(ModelSchema):
 	def resolve_classes(obj):
 		if obj.class_set:
 			return obj.class_set.all()
+
+	@staticmethod
+	def resolve_teacher_count(obj):
+		return len([teacher for teacher in Teacher.objects.all() if teacher.member.school.id == obj.id])
+
+	@staticmethod
+	def resolve_student_count(obj):
+		return len([student for student in Student.objects.all() if student.member.school.id == obj.id])
+
+	@staticmethod
+	def resolve_class_count(obj):
+		return len(SchoolOut.resolve_classes(obj))

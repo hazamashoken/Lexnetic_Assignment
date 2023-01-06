@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from ninja import NinjaAPI
+from ninja.security import django_auth
 
 from lexnetic_school.api import router as lexetic_school_router
 
-api = NinjaAPI(csrf=True)
+api = NinjaAPI()
 api.add_router('v1', lexetic_school_router)
 
 urlpatterns = [
