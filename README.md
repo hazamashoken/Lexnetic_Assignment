@@ -78,11 +78,12 @@ Acronym:
 
 ## Unit Tests included
 
-59 cases for 
+69 cases for 
 GET
 POST
 PUT
 PATCH
+DELETE
 ```
 python3 manage.py test
 ```
