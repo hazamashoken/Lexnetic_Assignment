@@ -78,7 +78,12 @@ Acronym:
 
 ## Unit Tests included
 
-48 cases for most endpoints in test.py
+69 cases for 
+GET
+POST
+PUT
+PATCH
+DELETE
 ```
 python3 manage.py test
 ```
