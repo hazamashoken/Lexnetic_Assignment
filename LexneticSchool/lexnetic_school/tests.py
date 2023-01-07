@@ -9,12 +9,13 @@ from lexnetic_school.api import \
 	create_memberSubType,\
 	get_subtype,\
 	create_django_user,\
-	list_teachers, get_teacher, create_teacher, update_teacher, patch_teacher,\
-	list_headmasters, get_headmaster, create_headmaster, update_headmaster, patch_headmaster,\
-	list_students, get_student, create_student, update_student, patch_student,\
-	list_members, get_member,\
-	list_schools, get_school, create_school, update_school, patch_school,\
-	list_classes, get_class, create_class, update_class, patch_class
+	list_members, get_member
+
+from lexnetic_school.apis.class_ import list_classes, get_class, create_class, update_class, patch_class
+from lexnetic_school.apis.headmaster import list_headmasters, get_headmaster, create_headmaster, update_headmaster, patch_headmaster
+from lexnetic_school.apis.school import list_schools, get_school, create_school, update_school, patch_school
+from lexnetic_school.apis.student import list_students, get_student, create_student, update_student, patch_student
+from lexnetic_school.apis.teacher import list_teachers, get_teacher, create_teacher, update_teacher, patch_teacher
 
 from lexnetic_school.schemas import\
 	HeadMasterOut, HeadMasterIn, HeadMasterPut, HeadMasterPatch,\
