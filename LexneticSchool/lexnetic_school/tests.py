@@ -19,6 +19,7 @@ from lexnetic_school.apis.class_ import (
 	create_class,
 	update_class,
 	patch_class,
+	delete_class
 )
 from lexnetic_school.apis.headmaster import (
 	list_headmasters,
@@ -26,6 +27,7 @@ from lexnetic_school.apis.headmaster import (
 	create_headmaster,
 	update_headmaster,
 	patch_headmaster,
+	delete_headmaster
 )
 from lexnetic_school.apis.school import (
 	list_schools,
@@ -33,6 +35,7 @@ from lexnetic_school.apis.school import (
 	create_school,
 	update_school,
 	patch_school,
+	delete_school
 )
 from lexnetic_school.apis.student import (
 	list_students,
@@ -40,6 +43,7 @@ from lexnetic_school.apis.student import (
 	create_student,
 	update_student,
 	patch_student,
+	delete_student
 )
 from lexnetic_school.apis.teacher import (
 	list_teachers,
@@ -47,6 +51,7 @@ from lexnetic_school.apis.teacher import (
 	create_teacher,
 	update_teacher,
 	patch_teacher,
+	delete_teacher
 )
 
 from lexnetic_school.schemas import (
@@ -1145,3 +1150,91 @@ class PATCHStudentTest(TestCase):
 	def test_patch_student_class_does_not_exist(self):
 		student = patch_student(None, student_id=1, payload=STUDENT_IN_1_CL_2_SCH_1)
 		self.assertEqual(student, (404, {"detail": "Class does not exist."}))
+
+class DELETESchoolTest(TestCase):
+	def setUp(self):
+		create_school(None, payload=SCHOOL_IN_1)
+
+	def test_delete_school(self):
+		school = delete_school(None, school_id=1)
+		self.assertEqual(school, (200, {"detail": "School with id 1 sucessfully deleted."}))
+		school = delete_school(None, school_id=1)
+		self.assertEqual(school, (404, {"detail": "School does not exist."}))
+
+	def test_delete_school_no_school(self):
+		school = delete_school(None, school_id=2)
+		self.assertEqual(school, (404, {"detail": "School does not exist."}))
+
+class DELETEHeadMasterTest(TestCase):
+	def setUp(self):
+		create_school(None, payload=SCHOOL_IN_1)
+		create_headmaster(None, payload=HEADMASTER_IN_1_SCH_1)
+
+	def test_delete_headmaster(self):
+		headmaster = delete_headmaster(None, headmaster_id=1)
+		self.assertEqual(
+			headmaster, (200, {"detail": "HeadMaster with id 1 sucessfully deleted."})
+		)
+		headmaster = delete_headmaster(None, headmaster_id=1)
+		self.assertEqual(headmaster, (404, {"detail": "HeadMaster does not exist."}))
+
+	def test_delete_headmaster_no_headmaster(self):
+		headmaster = delete_headmaster(None, headmaster_id=2)
+		self.assertEqual(headmaster, (404, {"detail": "HeadMaster does not exist."}))
+
+class DELETETeacherTest(TestCase):
+	def setUp(self):
+		create_school(None, payload=SCHOOL_IN_1)
+		create_headmaster(None, payload=HEADMASTER_IN_1_SCH_1)
+		create_teacher(None, payload=TEACHER_IN_2_SCH_1)
+
+	def test_delete_teacher(self):
+		teacher = delete_teacher(None, teacher_id=1)
+		self.assertEqual(
+			teacher, (200, {"detail": "Teacher with id 1 sucessfully deleted."})
+		)
+		teacher = delete_teacher(None, teacher_id=1)
+		self.assertEqual(teacher, (404, {"detail": "Teacher does not exist."}))
+
+	def test_delete_teacher_no_teacher(self):
+		teacher = delete_teacher(None, teacher_id=2)
+		self.assertEqual(teacher, (404, {"detail": "Teacher does not exist."}))
+
+class DELETEClassTest(TestCase):
+	def setUp(self):
+		create_school(None, payload=SCHOOL_IN_1)
+		create_headmaster(None, payload=HEADMASTER_IN_1_SCH_1)
+		create_teacher(None, payload=TEACHER_IN_2_SCH_1)
+		create_class(None, payload=CLASS_IN_1_TE_1_SCH_1)
+
+	def test_delete_class(self):
+		class_ = delete_class(None, class_id=1)
+		self.assertEqual(
+			class_, (200, {"detail": "Class with id 1 sucessfully deleted."})
+		)
+		class_ = delete_class(None, class_id=1)
+		self.assertEqual(class_, (404, {"detail": "Class does not exist."}))
+
+	def test_delete_class_no_class(self):
+		class_ = delete_class(None, class_id=2)
+		self.assertEqual(class_, (404, {"detail": "Class does not exist."}))
+
+class DELETEStudentTest(TestCase):
+	def setUp(self):
+		create_school(None, payload=SCHOOL_IN_1)
+		create_headmaster(None, payload=HEADMASTER_IN_1_SCH_1)
+		create_teacher(None, payload=TEACHER_IN_2_SCH_1)
+		create_class(None, payload=CLASS_IN_1_TE_1_SCH_1)
+		create_student(None, payload=STUDENT_IN_3_CL_1_SCH_1)
+
+	def test_delete_student(self):
+		student = delete_student(None, student_id=1)
+		self.assertEqual(
+			student, (200, {"detail": "Student with id 1 sucessfully deleted."})
+		)
+		student = delete_student(None, student_id=1)
+		self.assertEqual(student, (404, {"detail": "Student does not exist."}))
+
+	def test_delete_student_no_student(self):
+		student = delete_student(None, student_id=2)
+		self.assertEqual(student, (404, {"detail": "Student does not exist."}))
