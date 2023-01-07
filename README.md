@@ -78,7 +78,7 @@ Acronym:
 
 ## Unit Tests included
 
-48 cases for most endpoints in test.py
+59 cases for most endpoints in test.py
 ```
 python3 manage.py test
 ```
