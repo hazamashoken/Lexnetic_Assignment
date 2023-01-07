@@ -173,6 +173,9 @@ def create_memberSubType(
 			member=new_member, f_class=class_, intake_year=payload.intake_year
 		)
 
+	if not payload.username:
+		new_member.username = generate_username_password(new_member)[0]
+
 	# create new Django User, change in settings.py
 	if CREATE_USER_ON_POST:
 		new_user = create_django_user(
@@ -180,7 +183,7 @@ def create_memberSubType(
 			is_staff=(MemberSubType == HeadMaster or MemberSubType == Teacher),
 		)
 		new_member.username = new_user.username
-		new_member.save()
+	new_member.save()
 	return new_member_subtype
 
 

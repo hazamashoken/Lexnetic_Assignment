@@ -130,4 +130,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_PASSWORD = "@42Bangkok"
 SECRET_KEY = "42Bangkok42BangkokGUACAMOLE"
 
-CREATE_USER_ON_POST = True
+CREATE_USER_ON_POST = False
