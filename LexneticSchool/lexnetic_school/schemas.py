@@ -5,29 +5,15 @@ from typing import Generic, TypeVar
 
 from lexnetic_school.models import Class, Student, Teacher, School, HeadMaster, PersonalInfo, Member
 
-PydanticField = TypeVar('PydanticField')
-
-class EmptyStrToDefault(Generic[PydanticField]):
-	@classmethod
-	def __get_validators__(cls):
-		yield cls.validate
-
-	@classmethod
-	def validate(cls, v: PydanticField, field: ModelField) -> PydanticField:
-		if v == "":
-			return field.default
-		return v
-
 ######################
 #   Wrapper Schemas  #
 ######################
 
-class ErrorOut(Schema):
+class DetailOut(Schema):
 	detail: str
 
 class OkOut(Schema):
 	detail: str
-	username: str = None
 	model: ModelSchema
 
 ######################
@@ -127,6 +113,11 @@ class StudentPut(Schema):
 	school_id: int
 	personal_info: PersonalInfoIn
 
+class ClassPut(Schema):
+	teacher_id: int
+	school_id: int
+	year: int
+
 ######################
 #   Schemas for GET  #
 ######################
@@ -157,8 +148,14 @@ class StudentOut(ModelSchema):
 	class Config:
 		model = Student
 		model_fields = ['id', 'intake_year']
+	username: str = None
 	class_id: int
 	personal_info: PersonalInfoOut
+
+	@staticmethod
+	def resolve_username(obj):
+		if obj.member:
+			return obj.member.username
 
 	@staticmethod
 	def resolve_personal_info(obj):
@@ -174,7 +171,13 @@ class TeacherOut(ModelSchema):
 	class Config:
 		model = Teacher
 		model_fields = ['id']
+	username: str = None
 	personal_info: PersonalInfoOut
+
+	@staticmethod
+	def resolve_username(obj):
+		if obj.member:
+			return obj.member.username
 
 	@staticmethod
 	def resolve_personal_info(obj):
@@ -184,7 +187,7 @@ class TeacherOut(ModelSchema):
 class ClassOut(ModelSchema):
 	class Config:
 		model = Class
-		model_fields = '__all__'
+		model_fields = ['id', 'year']
 	teachers: TeacherOut = None
 	student_count: int = None
 	students: list[StudentOut] = None
@@ -200,10 +203,11 @@ class ClassOut(ModelSchema):
 
 	@staticmethod
 	def resolve_student_count(obj):
-		return len(ClassOut.resolve_students(obj))
+		return Student.objects.filter(f_class=obj.id).count()
 
 class HeadMasterOut(ModelSchema):
 	school_id: int = None
+	username: str = None
 	class Config:
 		model = HeadMaster
 		model_fields = ['id']
@@ -215,6 +219,11 @@ class HeadMasterOut(ModelSchema):
 			return obj.school.id
 
 	@staticmethod
+	def resolve_username(obj):
+		if obj.member:
+			return obj.member.username
+
+	@staticmethod
 	def resolve_personal_info(obj):
 		if obj.member:
 			return obj.member.personal_info
@@ -224,21 +233,15 @@ class SchoolOut(ModelSchema):
 		model = School
 		model_fields = '__all__'
 	head_master: HeadMasterOut = None
-	teacher_count: int = None
 	student_count: int = None
+	teacher_count: int = None
 	class_count: int = None
-	classes: list[ClassOut] = None
 
 	@staticmethod
 	def resolve_head_master(obj):
 		for head_master in HeadMaster.objects.all():
 			if head_master.school.id == obj.id:
 				return head_master
-
-	@staticmethod
-	def resolve_classes(obj):
-		if obj.class_set:
-			return obj.class_set.all()
 
 	@staticmethod
 	def resolve_teacher_count(obj):
@@ -250,4 +253,5 @@ class SchoolOut(ModelSchema):
 
 	@staticmethod
 	def resolve_class_count(obj):
-		return len(SchoolOut.resolve_classes(obj))
+		if obj.class_set:
+			return obj.class_set.count()

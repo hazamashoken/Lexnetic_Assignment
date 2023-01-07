@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z^0$w-2&*)9dfw&=m+$nj+8og5o(-mjl^l2#q5(mp9f#m74r^@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lexnetic_school.middleware.JsonResponseMiddleware.JsonResponseMiddleware'
 ]
 
 ROOT_URLCONF = 'LexneticSchool.urls'
