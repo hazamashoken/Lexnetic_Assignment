@@ -18,7 +18,7 @@ from django.urls import path, include
 from ninja import NinjaAPI
 from ninja.security import django_auth
 
-from lexnetic_school.api import router as lexetic_school_router
+from lexnetic_school.api import router as base_router
 from lexnetic_school.apis.school import router as school_router
 from lexnetic_school.apis.class_ import router as class_router
 from lexnetic_school.apis.student import router as student_router
@@ -26,15 +26,15 @@ from lexnetic_school.apis.teacher import router as teacher_router
 from lexnetic_school.apis.headmaster import router as headmaster_router
 
 api = NinjaAPI()
-api.add_router('v1', school_router)
-api.add_router('v1', class_router)
-api.add_router('v1', student_router)
-api.add_router('v1', teacher_router)
-api.add_router('v1', headmaster_router)
-api.add_router('v1', lexetic_school_router)
+api.add_router("v1", school_router)
+api.add_router("v1", class_router)
+api.add_router("v1", student_router)
+api.add_router("v1", teacher_router)
+api.add_router("v1", headmaster_router)
+api.add_router("v1", base_router)
 
 urlpatterns = [
-	path('api/', api.urls),
-	path('admin/', admin.site.urls),
-	path('', include('lexnetic_school.urls')),
+	path("api/", api.urls),
+	path("admin/", admin.site.urls),
+	path("", include("lexnetic_school.urls")),
 ]
