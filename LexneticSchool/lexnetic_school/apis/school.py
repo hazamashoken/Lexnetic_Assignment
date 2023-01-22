@@ -5,7 +5,7 @@ from ninja.errors import HttpError
 from django.contrib.auth.models import User
 from LexneticSchool.settings import DEFAULT_PASSWORD, SECRET_KEY, CREATE_USER_ON_POST
 
-from lexnetic_school.models import (
+from lexnetic_school.models.models import (
 	Class,
 	Student,
 	Teacher,
@@ -14,7 +14,7 @@ from lexnetic_school.models import (
 	PersonalInfo,
 	Member,
 )
-from lexnetic_school.schemas import OkOut, DetailOut, SchoolIn, SchoolOut, SchoolPatch
+from lexnetic_school.models.schemas import OkOut, DetailOut, SchoolIn, SchoolOut, SchoolPatch
 
 from lexnetic_school.api import (
 	my_get_object_for_update_or_404,

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from lexnetic_school.models import HeadMaster, School, Class, Student, Teacher, Member, PersonalInfo
+from lexnetic_school.models.models import HeadMaster, School, Class, Student, Teacher, Member, PersonalInfo
 # Register your models here.
 
 admin.site.register(HeadMaster)

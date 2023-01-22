@@ -3,7 +3,7 @@ from ninja.orm import create_schema
 from pydantic.fields import ModelField
 from typing import Generic, TypeVar
 
-from lexnetic_school.models import (
+from lexnetic_school.models.models import (
 	Class,
 	Student,
 	Teacher,

@@ -25,7 +25,7 @@ from lexnetic_school.apis.student import router as student_router
 from lexnetic_school.apis.teacher import router as teacher_router
 from lexnetic_school.apis.headmaster import router as headmaster_router
 
-api = NinjaAPI()
+api = NinjaAPI(title="Lexnetic School API", version="1.0.0", csrf=True)
 api.add_router("v1", school_router)
 api.add_router("v1", class_router)
 api.add_router("v1", student_router)

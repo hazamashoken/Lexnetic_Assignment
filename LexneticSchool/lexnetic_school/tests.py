@@ -54,7 +54,7 @@ from lexnetic_school.apis.teacher import (
 	delete_teacher
 )
 
-from lexnetic_school.schemas import (
+from LexneticSchool.lexnetic_school.models.schemas import (
 	HeadMasterOut,
 	HeadMasterIn,
 	HeadMasterPut,
@@ -81,7 +81,7 @@ from lexnetic_school.schemas import (
 	PersonalInfoPatch,
 )
 
-from lexnetic_school.models import (
+from LexneticSchool.lexnetic_school.models.models import (
 	Member,
 	PersonalInfo,
 	Student,
